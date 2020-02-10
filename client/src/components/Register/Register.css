@@ -45,6 +45,10 @@
   color: white;
 }
 
+.register-signup {
+  margin-top: 20px;
+}
+
 /* MOBILE */
 
 @media screen and (max-width: 992px) {
