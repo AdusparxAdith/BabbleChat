@@ -12,13 +12,19 @@ export default function Register() {
 
   const registerUser = async () => {
     let API = mode === "login" ? "/api/auth/login" : "/api/auth/register";
+
     let result = await Axios.post(API, {
       name,
       email,
       password
     });
+
     alert(result.data.message);
-    if (result.status === 200) setRedirect(true);
+    if (result.data.success) {
+      console.log(result.data);
+      localStorage.setItem("token", result.data.token);
+      setRedirect(true);
+    }
   };
 
   return (
@@ -42,6 +48,7 @@ export default function Register() {
               <input
                 className="register-input"
                 type="text"
+                autocomplete="off"
                 placeholder="Jhon Doe"
                 onChange={event => setName(event.target.value)}
               />
@@ -51,6 +58,7 @@ export default function Register() {
             <input
               className="register-input"
               type="email"
+              autocomplete="off"
               placeholder="jhondoe@gmail.com"
               onChange={event => setEmail(event.target.value)}
             />
@@ -60,9 +68,14 @@ export default function Register() {
               placeholder="Password"
               minlength="8"
               required
+              autocomplete="off"
               onChange={event => setPassword(event.target.value)}
             />
-            <button className="register-button" onClick={() => registerUser()}>
+            <button
+              className="register-button"
+              style={{ cursor: "pointer" }}
+              onClick={() => registerUser()}
+            >
               {mode === "login" ? "Sign In" : "Sign Up"}
             </button>
           </div>
@@ -72,7 +85,7 @@ export default function Register() {
             <p>
               Don't have an account?{" "}
               <span
-                style={{ color: "blue", cursor: "pointer" }}
+                style={{ color: "#3498db", cursor: "pointer" }}
                 onClick={() => setMode("signup")}
               >
                 Sign Up
@@ -84,7 +97,7 @@ export default function Register() {
             <p>
               Already have an account?{" "}
               <span
-                style={{ color: "blue", cursor: "pointer" }}
+                style={{ color: "#3498db", cursor: "pointer" }}
                 onClick={() => setMode("login")}
               >
                 Sign In

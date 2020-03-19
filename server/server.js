@@ -15,7 +15,16 @@ app.use("/api/chat", require("./routes/chat"));
 app.use("/api/auth", require("./routes/auth"));
 
 io.on("connect", socket => {
-  console.log("A user connected on", socket);
+  socket.emit("chat-message", "Welcome to babble!");
+
+  socket.on("new-user", data => {
+    console.log(`${data} connected`);
+    socket.broadcast.emit("chat-message", `${data} joined the chat!`);
+  });
+
+  socket.on("send-message", data => {
+    socket.broadcast.emit("chat-message", data);
+  });
 });
 
 server.listen(PORT, () => console.log("The Server is running on ", PORT));
