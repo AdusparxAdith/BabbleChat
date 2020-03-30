@@ -14,17 +14,33 @@ app.use(cors());
 app.use("/api/chat", require("./routes/chat"));
 app.use("/api/auth", require("./routes/auth"));
 
-io.on("connect", socket => {
-  socket.emit("chat-message", "Welcome to babble!");
+try {
+  io.on("connect", socket => {
+    socket.on("new-user", data => {
+      // Initial Connection
+      console.log(`${data} connected`);
 
-  socket.on("new-user", data => {
-    console.log(`${data} connected`);
-    socket.broadcast.emit("chat-message", `${data} joined the chat!`);
+      socket.emit("chat-message", {
+        user: "Admin",
+        message: "Welcome to babble!",
+        time: new Date().toLocaleTimeString()
+      });
+
+      socket.broadcast.emit("chat-message", {
+        user: "Admin",
+        message: `${data} joined the chat!`,
+        time: new Date().toLocaleTimeString()
+      });
+    });
+
+    socket.on("send-message", data => {
+      // Subsequent Chats
+      console.log(`${data.user} says ${data.message}`);
+      socket.broadcast.emit("chat-message", data);
+    });
   });
 
-  socket.on("send-message", data => {
-    socket.broadcast.emit("chat-message", data);
-  });
-});
-
-server.listen(PORT, () => console.log("The Server is running on ", PORT));
+  server.listen(PORT, () => console.log("The Server is running on ", PORT));
+} catch (error) {
+  console.log(error);
+}

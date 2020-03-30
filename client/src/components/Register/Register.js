@@ -1,5 +1,6 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useState, Fragment, useContext } from "react";
 import { Redirect } from "react-router-dom";
+import { UserContext } from "../Global/UserContext";
 import Axios from "axios";
 import "./Register.css";
 
@@ -9,6 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState("login");
   const [redirect, setRedirect] = useState(false);
+  const { setUser } = useContext(UserContext);
 
   const registerUser = async () => {
     let API = mode === "login" ? "/api/auth/login" : "/api/auth/register";
@@ -23,6 +25,8 @@ export default function Register() {
     if (result.data.success) {
       console.log(result.data);
       localStorage.setItem("token", result.data.token);
+      localStorage.setItem("user", JSON.stringify(result.data.user));
+      setUser(result.data.user);
       setRedirect(true);
     }
   };
@@ -58,7 +62,6 @@ export default function Register() {
             <input
               className="register-input"
               type="email"
-              autocomplete="off"
               placeholder="jhondoe@gmail.com"
               onChange={event => setEmail(event.target.value)}
             />
@@ -66,9 +69,8 @@ export default function Register() {
               className="register-input"
               type="password"
               placeholder="Password"
-              minlength="8"
+              minLength="8"
               required
-              autocomplete="off"
               onChange={event => setPassword(event.target.value)}
             />
             <button

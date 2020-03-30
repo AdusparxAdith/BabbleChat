@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css?family=Sen&display=swap");
+
+.chat-container {
+  display: flex;
+  height: 91vh;
+  flex-direction: column;
+  font-family: "Sen", sans-serif;
+}
+
+#chat-body {
+  display: flex;
+  height: 100%;
+  padding: 20px 1%;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.chat-control {
+  display: flex;
+
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+#text-message-input {
+  width: 90vw;
+  padding: 20px;
+  outline: none;
+}
+
+.chat-send {
+  min-width: 100px;
+  width: 10vw;
+  padding: 20px;
+  cursor: pointer;
+  outline: none;
+  background: #3498db;
+  color: white;
+}
+
+.chat-send:hover {
+  background: #2980b9;
+  transition: ease-in 0.1s;
+}
+
+.chat-send:active {
+  background-color: #1a6ca2;
+}
+
+.message-element {
+  padding: 20px;
+  width: fit-content;
+  margin: 20px;
+  background: #f4f9fa;
+  min-width: 200px;
+  border-radius: 20px;
+}
+
+.message-element-right {
+  align-self: flex-end;
+  background: #3498db;
+  color: white;
+}
+
+.message-element-user {
+  color: #2c3e50;
+  font-style: italic;
+}
+
+.message-element-time {
+  color: #2c3e50;
+  text-align: end;
+  font-size: small;
+}

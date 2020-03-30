@@ -38,7 +38,11 @@ router.post("/register", async (req, res) => {
       return res.status(200).send({
         message: "Welcome to the best Chat Application!",
         token,
-        success: true
+        success: true,
+        user: {
+          id: user.id,
+          name: user.name
+        }
       });
     }
   } catch (error) {
@@ -56,8 +60,6 @@ router.post("/login", async (req, res) => {
 
     let user = await User.findOne({ email });
 
-    console.log(user.id);
-
     if (user) {
       let authorized = await bcrypt.compare(password, user.password);
 
@@ -71,7 +73,11 @@ router.post("/login", async (req, res) => {
         return res.send({
           message: `Welcome back ${user.name}`,
           token,
-          success: true
+          success: true,
+          user: {
+            id: user.id,
+            name: user.name
+          }
         });
       } else {
         console.log(`Unauthorized attempt, ${email} - ${user.name}`);

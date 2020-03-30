@@ -1,0 +1,29 @@
+.navbar {
+  height: 9vh;
+
+  background: #2980b9;
+  color: white;
+  display: flex;
+  font-family: "Sen", sans-serif;
+}
+
+.navbar-user {
+  padding: 30px;
+}
+
+.navbar-button {
+  margin-left: auto;
+  height: 100%;
+  padding: 30px;
+  background: #2070a5;
+  color: white;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.navbar-button:hover {
+  background: #2c3e50;
+  color: white;
+  transition: ease-in 0.2s;
+}
