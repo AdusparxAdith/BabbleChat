@@ -46,6 +46,14 @@ try {
   });
 
   server.listen(PORT, () => console.log("The Server is running on ", PORT));
+
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+  }
+
+  app.get("*", (request, response) => {
+    response.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
 } catch (error) {
   console.log(error);
 }
