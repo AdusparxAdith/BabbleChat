@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const socketio = require("socket.io");
 const cors = require("cors");
+const path = require("path");
 require("./db/db");
 
 const app = express();
