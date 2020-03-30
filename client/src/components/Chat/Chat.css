@@ -71,3 +71,12 @@
   text-align: end;
   font-size: small;
 }
+
+#status-box {
+  padding: 10px;
+  position: fixed;
+  bottom: 6vh;
+  left: 10px;
+  font-style: italic;
+  width: 100%;
+}

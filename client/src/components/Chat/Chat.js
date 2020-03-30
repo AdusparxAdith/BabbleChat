@@ -9,7 +9,7 @@ export default function Chat() {
   const { user } = useContext(UserContext);
   console.log("Logged in as", user);
 
-  socket.emit("new-user", "Amar");
+  socket.emit("new-user", user.name);
 
   const appendMessage = (data, self) => {
     const messageElement = document.createElement("div");
@@ -34,6 +34,15 @@ export default function Chat() {
     socket.on("chat-message", data => {
       appendMessage(data);
     });
+    socket.on("typing", data => {
+      document.getElementById(
+        "status-box"
+      ).innerHTML = `${data.user} is typing...`;
+      setTimeout(
+        () => (document.getElementById("status-box").innerHTML = ""),
+        1000
+      );
+    });
   };
 
   const submit = () => {
@@ -53,15 +62,20 @@ export default function Chat() {
     <div>
       <div className="chat-container">
         <div id="chat-body"></div>
+        <div id="status-box"></div>
         <div className="chat-control">
           <input
             onKeyDown={e => {
               if (e.keyCode === 13) submit();
+              else {
+                socket.emit("typing", { user: user.name });
+              }
             }}
             type="text"
             id="text-message-input"
             placeholder="message"
           />
+
           <button className="chat-send" onClick={() => submit()}>
             Send
           </button>

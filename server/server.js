@@ -38,6 +38,11 @@ try {
       console.log(`${data.user} says ${data.message}`);
       socket.broadcast.emit("chat-message", data);
     });
+
+    socket.on("typing", data => {
+      // Typing
+      socket.broadcast.emit("typing", data);
+    });
   });
 
   server.listen(PORT, () => console.log("The Server is running on ", PORT));
