@@ -3,7 +3,9 @@ import io from "socket.io-client";
 import "./Chat.css";
 import { UserContext } from "../Global/UserContext";
 
-const socket = io("http://localhost:5000");
+const HOST = location.origin.replace(/^http/, "ws");
+
+const socket = io(HOST);
 
 export default function Chat() {
   const { user } = useContext(UserContext);
