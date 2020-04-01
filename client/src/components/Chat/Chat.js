@@ -3,9 +3,9 @@ import io from "socket.io-client";
 import "./Chat.css";
 import { UserContext } from "../Global/UserContext";
 
-const HOST = location.origin.replace(/^http/, "ws");
+const HOST = "http://thebabblechatapp.herokuapp.com/";
 
-const socket = io(HOST);
+const socket = io();
 
 export default function Chat() {
   const { user } = useContext(UserContext);
