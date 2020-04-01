@@ -3,8 +3,7 @@ import io from "socket.io-client";
 import "./Chat.css";
 import { UserContext } from "../Global/UserContext";
 
-const HOST = "http://thebabblechatapp.herokuapp.com/";
-
+// const socket = io("http://localhost:5000");
 const socket = io();
 
 export default function Chat() {

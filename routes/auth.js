@@ -24,12 +24,23 @@ router.post("/register", async (req, res) => {
 
       password = await bcrypt.hash(password, 10);
 
-      let user = await User.collection.insertOne({
-        email,
-        name,
-        password,
-        created_on
-      });
+      let user = await User.findOneAndUpdate(
+        {
+          email
+        },
+        {
+          $set: {
+            email,
+            name,
+            password,
+            created_on
+          }
+        },
+        {
+          upsert: true,
+          new: true
+        }
+      );
 
       let token = jwt.sign({ id: user.id }, secret, {
         expiresIn: "24h" // expires in 24 hours
