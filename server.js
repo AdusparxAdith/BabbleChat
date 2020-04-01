@@ -3,6 +3,7 @@ const http = require("http");
 const socketio = require("socket.io");
 const cors = require("cors");
 const path = require("path");
+const { registerSocket, getUserBySocket } = require("./utils/socketFunctions");
 require("./db/db");
 
 const app = express();
@@ -20,6 +21,7 @@ try {
     socket.on("new-user", data => {
       // Initial Connection
       console.log(`${data} connected`);
+      registerSocket(socket.id, data);
 
       socket.emit("chat-message", {
         user: "Admin",
@@ -30,6 +32,17 @@ try {
       socket.broadcast.emit("chat-message", {
         user: "Admin",
         message: `${data} joined the chat!`,
+        time: new Date().toLocaleTimeString()
+      });
+    });
+
+    socket.on("disconnect", async () => {
+      // On Logout
+      let user = await getUserBySocket(socket.id);
+      console.log(user.name, "disconnected");
+      socket.broadcast.emit("chat-message", {
+        user: "Admin",
+        message: `${user.name} left the chat!`,
         time: new Date().toLocaleTimeString()
       });
     });

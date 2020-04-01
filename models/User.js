@@ -15,6 +15,9 @@ const UserSchema = new Schema(
     },
     password: {
       type: String
+    },
+    socket: {
+      type: String
     }
   },
   { strict: true }

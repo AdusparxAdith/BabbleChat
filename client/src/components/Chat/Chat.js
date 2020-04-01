@@ -3,8 +3,8 @@ import io from "socket.io-client";
 import "./Chat.css";
 import { UserContext } from "../Global/UserContext";
 
-// const socket = io("http://localhost:5000");
-const socket = io();
+const socket = io("http://localhost:5000");
+// const socket = io();
 
 export default function Chat() {
   const { user } = useContext(UserContext);
@@ -29,6 +29,10 @@ export default function Chat() {
 
     if (self) messageElement.classList.add("message-element-right");
     document.getElementById("chat-body").append(messageElement);
+
+    // AUTO SCROLL TO BOTTOM
+    let chatBody = document.getElementById("chat-body");
+    chatBody.scrollTop = chatBody.scrollHeight;
   };
 
   const ping = () => {
@@ -47,6 +51,7 @@ export default function Chat() {
   };
 
   const submit = () => {
+    if (!document.getElementById("text-message-input").value) return;
     let data = {
       user: user.name,
       message: document.getElementById("text-message-input").value,
@@ -58,6 +63,11 @@ export default function Chat() {
   };
   useEffect(() => {
     ping();
+    return () => {
+      socket.emit("disconnect", user.name);
+
+      socket.off();
+    };
   }, []);
   return (
     <div>
