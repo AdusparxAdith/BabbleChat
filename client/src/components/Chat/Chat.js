@@ -16,7 +16,6 @@ export default function Chat() {
     const messageElement = document.createElement("div");
     messageElement.className = "message-element";
 
-    console.log(data);
     messageElement.innerHTML = `<div>
         ${
           data.user
@@ -36,10 +35,10 @@ export default function Chat() {
   };
 
   const ping = () => {
-    socket.on("chat-message", data => {
+    socket.on("chat-message", (data) => {
       appendMessage(data);
     });
-    socket.on("typing", data => {
+    socket.on("typing", (data) => {
       document.getElementById(
         "status-box"
       ).innerHTML = `${data.user} is typing...`;
@@ -55,7 +54,7 @@ export default function Chat() {
     let data = {
       user: user.name,
       message: document.getElementById("text-message-input").value,
-      time: new Date().toLocaleTimeString()
+      time: new Date().toLocaleTimeString(),
     };
     socket.emit("send-message", data);
     document.getElementById("text-message-input").value = "";
@@ -76,7 +75,7 @@ export default function Chat() {
         <div id="status-box"></div>
         <div className="chat-control">
           <input
-            onKeyDown={e => {
+            onKeyDown={(e) => {
               if (e.keyCode === 13) submit();
               else {
                 socket.emit("typing", { user: user.name });

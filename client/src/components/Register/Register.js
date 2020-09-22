@@ -15,19 +15,39 @@ export default function Register() {
   const registerUser = async () => {
     let API = mode === "login" ? "/api/auth/login" : "/api/auth/register";
 
-    let result = await Axios.post(API, {
-      name,
-      email,
-      password
-    });
+    try {
+      let result = await Axios.post(API, {
+        name,
+        email,
+        password,
+      });
 
-    alert(result.data.message);
-    if (result.data.success) {
-      console.log(result.data);
-      localStorage.setItem("token", result.data.token);
-      localStorage.setItem("user", JSON.stringify(result.data.user));
-      setUser(result.data.user);
-      setRedirect(true);
+      const {
+        data: {
+          message = "Contact adithdinesh97@gmail.com",
+          token,
+          user,
+          success = false,
+        },
+      } = result;
+
+      alert(message);
+
+      if (success) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        setRedirect(true);
+      } else {
+        alert("Contact adithdinesh97@gmail.com");
+      }
+    } catch (error) {
+      const {
+        response: {
+          data: { message = "Contact adithdinesh97@gmail.com" },
+        },
+      } = error;
+      alert(message);
     }
   };
 
@@ -52,9 +72,9 @@ export default function Register() {
               <input
                 className="register-input"
                 type="text"
-                autocomplete="off"
+                autoComplete="off"
                 placeholder="Jhon Doe"
-                onChange={event => setName(event.target.value)}
+                onChange={(event) => setName(event.target.value)}
               />
             ) : (
               ""
@@ -63,7 +83,7 @@ export default function Register() {
               className="register-input"
               type="email"
               placeholder="jhondoe@gmail.com"
-              onChange={event => setEmail(event.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <input
               className="register-input"
@@ -71,7 +91,7 @@ export default function Register() {
               placeholder="Password"
               minLength="8"
               required
-              onChange={event => setPassword(event.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <button
               className="register-button"

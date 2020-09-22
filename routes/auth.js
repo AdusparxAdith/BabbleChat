@@ -9,16 +9,10 @@ router.post("/register", async (req, res) => {
     let { name, email, password } = req.body;
     let secret = process.env.SECRET;
 
-    if (!email || !password || !name)
-      return res
-        .status(400)
-        .send({ message: "Please enter all details!", success: false });
+    if (!email || !password || !name) throw Error("Please enter all fields!");
 
     let userExists = await User.findOne({ email });
-    if (userExists)
-      return res
-        .status(400)
-        .send({ message: "This user already exists!", success: false });
+    if (userExists) throw Error("User already exists!");
     else {
       let created_on = new Date().toISOString();
 
@@ -26,24 +20,24 @@ router.post("/register", async (req, res) => {
 
       let user = await User.findOneAndUpdate(
         {
-          email
+          email,
         },
         {
           $set: {
             email,
             name,
             password,
-            created_on
-          }
+            created_on,
+          },
         },
         {
           upsert: true,
-          new: true
+          new: true,
         }
       );
 
       let token = jwt.sign({ id: user.id }, secret, {
-        expiresIn: "24h" // expires in 24 hours
+        expiresIn: "24h", // expires in 24 hours
       });
 
       return res.status(200).send({
@@ -52,12 +46,13 @@ router.post("/register", async (req, res) => {
         success: true,
         user: {
           id: user.id,
-          name: user.name
-        }
+          name: user.name,
+        },
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
+    return res.status(400).send({ message: error.message, success: false });
   }
 });
 
@@ -78,7 +73,7 @@ router.post("/login", async (req, res) => {
         console.log(`${user.name} just logged in!`);
 
         let token = jwt.sign({ id: user.id }, secret, {
-          expiresIn: "24h" // expires in 24 hours
+          expiresIn: "24h", // expires in 24 hours
         });
 
         return res.send({
@@ -87,20 +82,26 @@ router.post("/login", async (req, res) => {
           success: true,
           user: {
             id: user.id,
-            name: user.name
-          }
+            name: user.name,
+          },
         });
       } else {
         console.log(`Unauthorized attempt, ${email} - ${user.name}`);
-        return res.send({ message: "Invalid credentials", success: false });
+        return res
+          .status(400)
+          .send({ message: "Please check credentials!", success: false });
       }
     } else {
       console.log("User does not exist!");
-      return res.send({ message: "User does not exist!", success: false });
+      return res
+        .status(400)
+        .send({ message: "User does not exist!", success: false });
     }
   } catch (error) {
-    console.log(error);
-    return res.send({ message: "Internal Server Error" });
+    console.log(error.message);
+    return res
+      .status(500)
+      .send({ message: "Internal Server Error", success: false });
   }
 });
 
